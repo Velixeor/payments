@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Setter
@@ -23,27 +22,27 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "first_name", nullable = false)
-    private String first_name;
+    private String firstName;
     @Column(name = "middle_name", nullable = false)
-    private String middle_name;
+    private String middleName;
     @Column(name = "last_name", nullable = false)
-    private String last_name;
+    private String lastName;
     @Column(name = "mail", nullable = false, unique = true)
     private String mail;
     @Column(name = "number_phone", nullable = false, unique = true)
-    private String number_phone;
+    private String numberPhone;
     @Column(name = "is_staff", nullable = false)
-    private Boolean is_staff;
+    private Boolean isStaff;
     @Column(name = "date_create", nullable = false)
-    private LocalDateTime date_create;
+    private LocalDateTime dateCreate;
     @Column(name = "date_delete")
-    private LocalDateTime date_delete;
+    private LocalDateTime dateDelete;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_status_id", nullable = false)
-    private UserStatus user;
+    private UserStatus userStatus;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_loyalty_level_id", nullable = false)
-    private UserLoyaltyLevel user_loyalty_level_id;
+    private UserLoyaltyLevel userLoyaltyLevel;
 
 
 }

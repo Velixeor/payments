@@ -27,7 +27,7 @@ public class UserLoyaltyLevel {
     @Column(name = "code", nullable = false)
     private String code;
     @Column(name = "is_active", nullable = false)
-    private Boolean is_active;
+    private Boolean isActive;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "user_loyalty_level_bonus",
             joinColumns = @JoinColumn(name = "user_loyalty_level_id", referencedColumnName = "id"),
