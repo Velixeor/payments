@@ -1,6 +1,6 @@
 package com.example.payments.dto;
 
-import com.example.payments.entity.Bonus;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
