@@ -3,10 +3,9 @@ package com.example.payments.controller;
 import com.example.payments.Service.UserService;
 import com.example.payments.dto.UserDTO;
 
-
-//import lombok.extern.slf4j.Slf4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,42 +15,35 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
-@Autowired
-private final UserService userService;
+    @Autowired
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/create_user")
-    public ResponseEntity createUser(@RequestBody UserDTO userDTO){
-    if(userService.createUser(userDTO))
-        return ResponseEntity.status(201).build();
-    else
-        return ResponseEntity.status(409).build();
-
-
+    public ResponseEntity<Void> createUser(@RequestBody UserDTO userDTO) {
+        userService.createUser(userDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
     @PutMapping("/update_user")
-    public ResponseEntity updateUser(@RequestBody UserDTO userDTO){
-        if(userService.updateUser(userDTO))
-            return ResponseEntity.status(201).build();
-        else
-            return ResponseEntity.status(409).build();
-
-
+    public ResponseEntity<Void> updateUser(@RequestBody UserDTO userDTO) {
+       userService.updateUser(userDTO);
+       return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
+
     @DeleteMapping("/delete_user")
-    public ResponseEntity deleteUser(@RequestParam Integer idUser){
-        if(userService.deleteUser(idUser))
-            return ResponseEntity.status(200).build();
-        else
-            return ResponseEntity.status(409).build();
+    public ResponseEntity<Void> deleteUser(@RequestParam Integer idUser) {
+        userService.deleteUser(idUser);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 
 
     }
+
     @GetMapping("/get_user")
-    public UserDTO getUser(@RequestParam Integer idUser){
+    public UserDTO getUser(@RequestParam Integer idUser) {
         return userService.getUser(idUser);
 
     }

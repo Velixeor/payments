@@ -2,22 +2,26 @@ package com.example.payments.Service;
 
 import com.example.payments.dto.UserDTO;
 import com.example.payments.entity.User;
+import com.example.payments.exception.UserCreationException;
+import com.example.payments.exception.UserDeleteException;
+import com.example.payments.exception.UserUpdateException;
 import com.example.payments.repository.UserLoyaltyLevelRepository;
 import com.example.payments.repository.UserRepository;
 import com.example.payments.repository.UserStatusRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserService {
 
-    @Autowired
+
     private final UserRepository userRepository;
-    @Autowired
     private final UserStatusRepository userStatusRepository;
-    @Autowired
+
     private final UserLoyaltyLevelRepository userLoyaltyLevelRepository;
 
     public UserService(UserRepository userRepository, UserStatusRepository userStatusRepository, UserLoyaltyLevelRepository userLoyaltyLevelRepository) {
@@ -26,37 +30,38 @@ public class UserService {
         this.userLoyaltyLevelRepository = userLoyaltyLevelRepository;
     }
 
-    public Boolean createUser(UserDTO userDTO) {
+    public void createUser(UserDTO userDTO) {
         User user = new User();
         if (!userRepository.existsUserByLoginAndAndMailAndNumberPhone(userDTO.getLogin(), userDTO.getNumberPhone(), userDTO.getMail())) {
             TransferringDataInUserFromUserDTO(userDTO,user);
             userRepository.save(user);
-            return true;
+            log.info("User created successfully: {}", userDTO);
         } else {
-            return false;
+            throw new UserCreationException(userDTO);
         }
     }
 
-    public Boolean updateUser(UserDTO userDTO) {
+    public void updateUser(UserDTO userDTO) {
         User user=userRepository.getUserById(userDTO.getId());
         List<User> userList=userRepository.getUsersByLoginOrMailOrNumberPhone(userDTO.getLogin(), userDTO.getMail(), userDTO.getNumberPhone());
         for(User u:userList){
             if(!user.getId().equals(u.getId()))
-                return false;
+                throw new UserUpdateException(userDTO);
         }
         TransferringDataInUserFromUserDTO(userDTO,user);
         userRepository.save(user);
-        return true;
+        log.info("User update successfully: {}", userDTO);
+
     }
 
-    public Boolean deleteUser(Integer idUser) {
+    public void deleteUser(Integer idUser) {
         User user=userRepository.getUserById(idUser);
         if(!user.getIsStaff()) {
             userRepository.delete(user);
-            return true;
+            log.info("User delete successfully: {}", idUser);
         }
         else{
-            return false;
+            throw new UserDeleteException("Attempt to delete staff");
         }
 
     }
