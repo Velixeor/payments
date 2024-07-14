@@ -6,12 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+
+import java.time.ZonedDateTime;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user", schema = "auth")
 public class User {
     @Id
     @Column(name = "id")
@@ -34,9 +37,9 @@ public class User {
     @Column(name = "is_staff", nullable = false)
     private Boolean isStaff;
     @Column(name = "date_create", nullable = false)
-    private LocalDateTime dateCreate;
+    private ZonedDateTime dateCreate;
     @Column(name = "date_delete")
-    private LocalDateTime dateDelete;
+    private ZonedDateTime dateDelete;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_status_id", nullable = false)
     private UserStatus userStatus;

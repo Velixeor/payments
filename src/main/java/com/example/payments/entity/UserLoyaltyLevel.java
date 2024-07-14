@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -24,13 +21,13 @@ public class UserLoyaltyLevel {
     private Integer id;
     @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "code", nullable = false)
+    @Column(name = "code", nullable = false, unique = true)
     private String code;
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "user_loyalty_level_bonus",
+    @JoinTable(name = "user_loyalty_level_privilege",
             joinColumns = @JoinColumn(name = "user_loyalty_level_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "bonus_id", referencedColumnName = "id"))
-    private List<Bonus> bonuses;
+            inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+    private List<Privilege> bonuses;
 }

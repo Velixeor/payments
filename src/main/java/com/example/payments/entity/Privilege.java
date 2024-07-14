@@ -14,19 +14,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "bonus", schema = "auth")
-public class Bonus {
+@Table(name = "privilege", schema = "auth")
+public class Privilege {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "code", nullable = false)
+    @Column(name = "code", nullable = false, unique = true)
     private String code;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "user_loyalty_level_bonus",
-            joinColumns = @JoinColumn(name = "bonus_id", referencedColumnName = "id"),
+    @JoinTable(name = "user_loyalty_level_privilege",
+            joinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_loyalty_level_id", referencedColumnName = "id"))
     private List<UserLoyaltyLevel> userLoyaltyLevels;
 
