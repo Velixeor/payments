@@ -7,11 +7,10 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class BonusDTO {
+public class PrivilegeDTO {
     private Integer id;
     private String title;
     private String code;
-    private Boolean isActive;
     private List<Integer> loyaltyLevelID;
 }
 

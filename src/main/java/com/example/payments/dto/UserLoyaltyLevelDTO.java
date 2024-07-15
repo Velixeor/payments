@@ -13,5 +13,5 @@ public class UserLoyaltyLevelDTO {
     private String title;
     private String code;
     private Boolean isActive;
-    private List<Integer> bonusesID;
+    private List<Integer> privilegesID;
 }
