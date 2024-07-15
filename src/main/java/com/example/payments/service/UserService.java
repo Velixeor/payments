@@ -32,34 +32,37 @@ public class UserService {
     public void createUser(UserDTO userDTO) {
         User user = new User();
         if (!userRepository.existsUserByLoginAndAndMailAndNumberPhone(userDTO.getLogin(), userDTO.getNumberPhone(), userDTO.getMail())) {
-            TransferringDataInUserFromUserDTO(userDTO,user);
+            TransferringDataInUserFromUserDTO(userDTO, user);
             userRepository.save(user);
             log.info("User created successfully: {}", userDTO);
         } else {
+            log.warn("Failed to create user: {}", userDTO);
             throw new UserCreationException(userDTO);
         }
     }
 
     public void updateUser(UserDTO userDTO) {
-        User user=userRepository.getUserById(userDTO.getId());
-        List<User> userList=userRepository.getUsersByLoginOrMailOrNumberPhone(userDTO.getLogin(), userDTO.getMail(), userDTO.getNumberPhone());
-        for(User u:userList){
-            if(!user.getId().equals(u.getId()))
+        User user = userRepository.getUserById(userDTO.getId());
+        List<User> userList = userRepository.getUsersByLoginOrMailOrNumberPhone(userDTO.getLogin(), userDTO.getMail(), userDTO.getNumberPhone());
+        for (User u : userList) {
+            if (!user.getId().equals(u.getId())) {
+                log.warn("Failed to update user: {}", userDTO);
                 throw new UserUpdateException(userDTO);
+            }
         }
-        TransferringDataInUserFromUserDTO(userDTO,user);
+        TransferringDataInUserFromUserDTO(userDTO, user);
         userRepository.save(user);
         log.info("User update successfully: {}", userDTO);
 
     }
 
     public void deleteUser(Integer idUser) {
-        User user=userRepository.getUserById(idUser);
-        if(!user.getIsStaff()) {
+        User user = userRepository.getUserById(idUser);
+        if (!user.getIsStaff()) {
             userRepository.delete(user);
             log.info("User delete successfully: {}", idUser);
-        }
-        else{
+        } else {
+            log.warn("Failed to delete user: {}", idUser);
             throw new UserDeleteException("Attempt to delete staff");
         }
 
@@ -70,10 +73,11 @@ public class UserService {
         UserDTO userDTO = new UserDTO(user.getId(), user.getLogin(), user.getPassword(), user.getFirstName(),
                 user.getMiddleName(), user.getLastName(), user.getMail(), user.getNumberPhone(),
                 user.getIsStaff(), user.getDateCreate(), user.getUserStatus().getId(), user.getUserLoyaltyLevel().getId());
-        return  userDTO;
+        return userDTO;
 
     }
-    private void TransferringDataInUserFromUserDTO(UserDTO userDTO,User user){
+
+    private void TransferringDataInUserFromUserDTO(UserDTO userDTO, User user) {
         user.setPassword(userDTO.getPassword());
         user.setDateCreate(userDTO.getDateCreate());
         user.setMail(userDTO.getMail());
