@@ -1,4 +1,4 @@
-package com.example.payments.Service;
+package com.example.payments.service;
 
 import com.example.payments.dto.UserDTO;
 import com.example.payments.entity.User;
@@ -9,7 +9,6 @@ import com.example.payments.repository.UserLoyaltyLevelRepository;
 import com.example.payments.repository.UserRepository;
 import com.example.payments.repository.UserStatusRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
