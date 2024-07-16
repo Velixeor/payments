@@ -1,5 +1,6 @@
 package com.example.payments.service;
 
+
 import com.example.payments.dto.UserDTO;
 import com.example.payments.entity.User;
 import com.example.payments.exception.UserCreationException;
@@ -13,37 +14,39 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Slf4j
 @Service
 public class UserService {
-
-
     private final UserRepository userRepository;
     private final UserStatusRepository userStatusRepository;
-
     private final UserLoyaltyLevelRepository userLoyaltyLevelRepository;
 
-    public UserService(UserRepository userRepository, UserStatusRepository userStatusRepository, UserLoyaltyLevelRepository userLoyaltyLevelRepository) {
+    public UserService(UserRepository userRepository,
+                       UserStatusRepository userStatusRepository,
+                       UserLoyaltyLevelRepository userLoyaltyLevelRepository) {
         this.userRepository = userRepository;
         this.userStatusRepository = userStatusRepository;
         this.userLoyaltyLevelRepository = userLoyaltyLevelRepository;
     }
 
-    public void createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {
         User user = new User();
         if (!userRepository.existsUserByLoginAndAndMailAndNumberPhone(userDTO.getLogin(), userDTO.getNumberPhone(), userDTO.getMail())) {
             TransferringDataInUserFromUserDTO(userDTO, user);
-            userRepository.save(user);
+            User resultUser = userRepository.save(user);
+            UserDTO resultUserDTO = TransferringDataInUserDTOFromUser(resultUser);
             log.info("User created successfully: {}", userDTO);
+            return resultUserDTO;
         } else {
             log.warn("Failed to create user: {}", userDTO);
             throw new UserCreationException(userDTO);
         }
     }
 
-    public void updateUser(UserDTO userDTO) {
+    public UserDTO updateUserById(UserDTO userDTO) {
         User user = userRepository.getUserById(userDTO.getId());
-        List<User> userList = userRepository.getUsersByLoginOrMailOrNumberPhone(userDTO.getLogin(), userDTO.getMail(), userDTO.getNumberPhone());
+        List<User> userList = userRepository.findByLoginOrMailOrNumberPhone(userDTO.getLogin(), userDTO.getMail(), userDTO.getNumberPhone());
         for (User u : userList) {
             if (!user.getId().equals(u.getId())) {
                 log.warn("Failed to update user: {}", userDTO);
@@ -51,9 +54,10 @@ public class UserService {
             }
         }
         TransferringDataInUserFromUserDTO(userDTO, user);
-        userRepository.save(user);
+        User resultUser = userRepository.save(user);
+        UserDTO resultUserDTO = TransferringDataInUserDTOFromUser(resultUser);
         log.info("User update successfully: {}", userDTO);
-
+        return resultUserDTO;
     }
 
     public void deleteUser(Integer idUser) {
@@ -70,9 +74,7 @@ public class UserService {
 
     public UserDTO getUser(Integer idUser) {
         User user = userRepository.getUserById(idUser);
-        UserDTO userDTO = new UserDTO(user.getId(), user.getLogin(), user.getPassword(), user.getFirstName(),
-                user.getMiddleName(), user.getLastName(), user.getMail(), user.getNumberPhone(),
-                user.getIsStaff(), user.getDateCreate(), user.getUserStatus().getId(), user.getUserLoyaltyLevel().getId());
+        UserDTO userDTO = TransferringDataInUserDTOFromUser(user);
         return userDTO;
 
     }
@@ -89,6 +91,11 @@ public class UserService {
         user.setNumberPhone(userDTO.getNumberPhone());
         user.setUserLoyaltyLevel(userLoyaltyLevelRepository.getUserLoyaltyLevelById(userDTO.getUserLoyaltyLevelId()));
         user.setUserStatus(userStatusRepository.getUserStatusById(userDTO.getUserStatusId()));
+
+    }
+
+    private UserDTO TransferringDataInUserDTOFromUser(User user) {
+        return new UserDTO(user.getId(), user.getLogin(), user.getPassword(), user.getFirstName(), user.getMiddleName(), user.getLastName(), user.getMail(), user.getNumberPhone(), user.getIsStaff(), user.getDateCreate(), user.getUserStatus().getId(), user.getUserLoyaltyLevel().getId());
 
     }
 
