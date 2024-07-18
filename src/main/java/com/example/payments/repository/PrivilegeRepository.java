@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PrivilegeRepository extends JpaRepository<Privilege, Integer> {
-    Privilege getBonusById(Integer id);
+    Privilege getPrivilegeById(Integer id);
 }

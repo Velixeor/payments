@@ -28,8 +28,8 @@ public class UserLoyaltyLevel {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "user_loyalty_level_privilege",
+    @JoinTable(name = "user_loyalty_level_privilege", schema = "auth",
             joinColumns = @JoinColumn(name = "user_loyalty_level_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-    private List<Privilege> bonuses;
+    private List<Privilege> privileges;
 }

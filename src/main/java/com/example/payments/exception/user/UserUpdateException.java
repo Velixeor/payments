@@ -1,7 +1,8 @@
-package com.example.payments.exception;
+package com.example.payments.exception.user;
 
 
 import com.example.payments.dto.UserDTO;
+import com.example.payments.exception.PaymentsException;
 
 
 public class UserUpdateException extends PaymentsException {

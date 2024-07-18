@@ -1,6 +1,11 @@
 package com.example.payments.exception;
 
 
+import com.example.payments.exception.user.UserCreationException;
+import com.example.payments.exception.user.UserDeleteException;
+import com.example.payments.exception.user.UserUpdateException;
+import com.example.payments.exception.userLoyaltyLevel.UserLoyaltyLevelCreationException;
+import com.example.payments.exception.userLoyaltyLevel.UserLoyaltyLevelUpdateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +31,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserDeleteException.class)
     public ResponseEntity<Void> handleUserDeleteException(UserDeleteException userDeleteException) {
         log.warn(userDeleteException.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+    @ExceptionHandler(UserLoyaltyLevelUpdateException.class)
+    public ResponseEntity<Void> handleUserLoyaltyLevelUpdateException(UserLoyaltyLevelUpdateException userLoyaltyLevelUpdateException) {
+        log.warn(userLoyaltyLevelUpdateException.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+    @ExceptionHandler(UserLoyaltyLevelCreationException.class)
+    public ResponseEntity<Void> handleUserLoyaltyLevelCreationException(UserLoyaltyLevelCreationException userLoyaltyLevelCreationException) {
+        log.warn(userLoyaltyLevelCreationException.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 

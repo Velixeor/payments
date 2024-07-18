@@ -3,9 +3,9 @@ package com.example.payments.service;
 
 import com.example.payments.dto.UserDTO;
 import com.example.payments.entity.User;
-import com.example.payments.exception.UserCreationException;
-import com.example.payments.exception.UserDeleteException;
-import com.example.payments.exception.UserUpdateException;
+import com.example.payments.exception.user.UserCreationException;
+import com.example.payments.exception.user.UserDeleteException;
+import com.example.payments.exception.user.UserUpdateException;
 import com.example.payments.repository.UserLoyaltyLevelRepository;
 import com.example.payments.repository.UserRepository;
 import com.example.payments.repository.UserStatusRepository;
