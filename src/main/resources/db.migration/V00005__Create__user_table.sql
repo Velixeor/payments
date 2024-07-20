@@ -9,12 +9,10 @@ create table auth.user
     mail                  text                        not null unique,
     is_staff              boolean                     not null,
     number_phone          text                        not null unique,
+    status                text,
     date_create           timestamp(6) with time zone not null,
-    date_delete           timestamp(6) with time zone,
-    user_status_id        integer                     not null,
+    date_update           timestamp(6) with time zone,
     user_loyalty_level_id integer                     not null,
-    foreign key (user_status_id) references auth.user_status (id)
-        on delete cascade,
     foreign key (user_loyalty_level_id) references auth.user_loyalty_level (id)
         on delete cascade
 )

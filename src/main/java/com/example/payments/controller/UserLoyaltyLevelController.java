@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Controller
-@RequestMapping("/api/user_loyalty_level")
+@RequestMapping("/api/v1/user-loyalty-level")
 public class UserLoyaltyLevelController {
 
     private final UserLoyaltyLevelService userLoyaltyLevelService;
@@ -20,11 +20,11 @@ public class UserLoyaltyLevelController {
         this.userLoyaltyLevelService = userLoyaltyLevelService;
     }
 
-    @PostMapping("/create_user_loyalty_level")
+    @PostMapping("/create")
     public ResponseEntity<UserLoyaltyLevelDTO> createUserLoyaltyLevel(@RequestBody UserLoyaltyLevelDTO userLoyaltyLevelDTO) {
         return new ResponseEntity<>(userLoyaltyLevelService.createUserLoyaltyLevel(userLoyaltyLevelDTO), HttpStatus.CREATED);
     }
-    @PutMapping("/update_user_loyalty_level")
+    @PutMapping("/update")
     public ResponseEntity<UserLoyaltyLevelDTO> updateUserLoyaltyLevelById(@RequestBody UserLoyaltyLevelDTO userLoyaltyLevelDTO) {
         return new ResponseEntity<>(userLoyaltyLevelService.updateUserLoyaltyLevelById(userLoyaltyLevelDTO), HttpStatus.CREATED);
     }

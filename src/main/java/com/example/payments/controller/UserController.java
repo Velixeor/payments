@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Controller
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     private final UserService userService;
@@ -20,17 +20,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/create_user")
+    @PostMapping("/create")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/update_user")
+    @PutMapping("/update")
     public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(userService.updateUserById(userDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete_user")
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteUser(@RequestParam Integer idUser) {
         userService.deleteUser(idUser);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -38,7 +38,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/get_user")
+    @GetMapping("")
     public ResponseEntity<UserDTO> getUser(@RequestParam Integer idUser) {
         return new ResponseEntity<>(userService.getUser(idUser), HttpStatus.OK);
 

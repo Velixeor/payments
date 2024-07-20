@@ -39,11 +39,11 @@ public class User {
     private Boolean isStaff;
     @Column(name = "date_create", nullable = false)
     private ZonedDateTime dateCreate;
-    @Column(name = "date_delete")
-    private ZonedDateTime dateDelete;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_status_id", nullable = false)
-    private UserStatus userStatus;
+    @Column(name = "date_update")
+    private ZonedDateTime dateUpdate;
+    @Enumerated(EnumType.STRING) //значение будет сохранено в базу как число
+    @Column(name="status")
+    private Status status;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_loyalty_level_id", nullable = false)
     private UserLoyaltyLevel userLoyaltyLevel;

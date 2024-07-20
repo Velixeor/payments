@@ -3,6 +3,7 @@ package com.example.payments.test.controller;
 
 import com.example.payments.controller.UserController;
 import com.example.payments.dto.UserDTO;
+import com.example.payments.entity.Status;
 import com.example.payments.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class UserControllerTest {
     void CreateUser() throws Exception {
         ZonedDateTime fixedDateTime = ZonedDateTime.parse("2024-07-14T20:14:05.593901Z");
         UserDTO userDTO = new UserDTO(1, "Velixeor", "123", "Egor", "Tsygankov", "Michalovich"
-                , "egor-tsygankov@mail.ru", "+79003674455", true, fixedDateTime, 2, 2);
+                , "egor-tsygankov@mail.ru", "+79003674455", true, fixedDateTime,  Status.ACTIVE, 2);
         String userDTOJson = objectMapper.writeValueAsString(userDTO);
         when(userService.createUser(userDTO)).thenReturn(userDTO);
         mockMvc.perform(post("/api/user/create_user")
@@ -61,7 +62,7 @@ class UserControllerTest {
     void getUserById() throws Exception {
         ZonedDateTime fixedDateTime = ZonedDateTime.parse("2024-07-14T20:14:05.593901Z");
         UserDTO userDTO = new UserDTO(1, "Velixeor", "123", "Egor", "Tsygankov", "Michalovich"
-                , "egor-tsygankov@mail.ru", "+79003674455", true, fixedDateTime, 2, 2);
+                , "egor-tsygankov@mail.ru", "+79003674455", true, fixedDateTime,  Status.ACTIVE, 2);
         when(userService.getUser(1)).thenReturn(userDTO);
         mockMvc.perform(get("/api/user/get_user").param("idUser", "1"))
                 .andExpect(status().isOk())
@@ -84,7 +85,7 @@ class UserControllerTest {
     void UpdateUserById() throws Exception {
         ZonedDateTime fixedDateTime = ZonedDateTime.parse("2024-07-14T20:14:05.593901Z");
         UserDTO userDTO = new UserDTO(1, "Velixeor", "123", "Egor", "Tsygankov", "Michalovich"
-                , "egor-tsygankov@mail.ru", "+79003674455", true, fixedDateTime, 2, 2);
+                , "egor-tsygankov@mail.ru", "+79003674455", true, fixedDateTime,  Status.ACTIVE, 2);
         String userDTOJson = objectMapper.writeValueAsString(userDTO);
         when(userService.updateUserById(userDTO)).thenReturn(userDTO);
         mockMvc.perform(put("/api/user/update_user")

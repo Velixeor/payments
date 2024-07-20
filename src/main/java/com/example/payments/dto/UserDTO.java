@@ -1,7 +1,9 @@
 package com.example.payments.dto;
 
 
+import com.example.payments.entity.Status;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,7 @@ import java.time.ZonedDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserDTO {
     private Integer id;
     private String login;
@@ -22,6 +25,6 @@ public class UserDTO {
     private String numberPhone;
     private Boolean isStaff;
     private ZonedDateTime dateCreate;
-    private Integer userStatusId;
+    private Status status;
     private Integer userLoyaltyLevelId;
 }
