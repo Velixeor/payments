@@ -16,3 +16,6 @@ spring:
     password: 135790
     schemas: auth,public
     locations: db.migration
+
+currency: ${CURRENCY:RUB}
+urlcore: ${URLCORE:http://localhost:8081/api/v1}

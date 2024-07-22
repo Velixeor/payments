@@ -2,6 +2,7 @@ package com.example.payments.service;
 
 
 import com.example.payments.dto.UserDTO;
+import com.example.payments.dto.UserDTOCore;
 import com.example.payments.entity.Status;
 import com.example.payments.entity.User;
 import com.example.payments.exception.user.UserCreationException;
@@ -11,7 +12,9 @@ import com.example.payments.repository.UserLoyaltyLevelRepository;
 import com.example.payments.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 
@@ -20,19 +23,25 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final UserLoyaltyLevelRepository userLoyaltyLevelRepository;
+    private final CoreService coreService;
 
     public UserService(UserRepository userRepository,
-                       UserLoyaltyLevelRepository userLoyaltyLevelRepository) {
+                       UserLoyaltyLevelRepository userLoyaltyLevelRepository,
+                       CoreService coreService) {
         this.userRepository = userRepository;
         this.userLoyaltyLevelRepository = userLoyaltyLevelRepository;
+        this.coreService = coreService;
     }
 
+    @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         User user = new User();
+        log.info("Start transactional");
         if (!userRepository.existsUserByLoginAndAndMailAndNumberPhone(userDTO.getLogin(), userDTO.getNumberPhone(), userDTO.getMail())) {
             TransferringDataInUserFromUserDTO(userDTO, user);
             User resultUser = userRepository.save(user);
             UserDTO resultUserDTO = TransferringDataInUserDTOFromUser(resultUser);
+            coreService.databaseSynchronization(resultUserDTO);
             log.info("User created successfully: {}", userDTO);
             return resultUserDTO;
         } else {
@@ -41,9 +50,10 @@ public class UserService {
         }
     }
 
+    @Transactional
     public UserDTO updateUserById(UserDTO userDTO) {
         User user = userRepository.getUserById(userDTO.getId());
-
+        log.info("Start transactional");
         if (user.getStatus() != Status.ACTIVE) {
             log.warn("Failed to update user: {}", userDTO);
             throw new UserUpdateException(userDTO);
@@ -58,15 +68,19 @@ public class UserService {
         }
 
         TransferringDataInUserFromUserDTO(userDTO, user);
+        user.setDateUpdate(ZonedDateTime.now());
         User resultUser = userRepository.save(user);
         UserDTO resultUserDTO = TransferringDataInUserDTOFromUser(resultUser);
+        UserDTOCore userDTOCore = new UserDTOCore(resultUserDTO.getId(), resultUserDTO.getLogin(), resultUserDTO.getStatus());
+        coreService.updateUserFromCore(userDTOCore);
         log.info("User update successfully: {}", userDTO);
         return resultUserDTO;
     }
 
     public void deleteUser(Integer idUser) {
         User user = userRepository.getUserById(idUser);
-        if (!user.getIsStaff()) {
+        user.setDateUpdate(ZonedDateTime.now());
+        if (!user.isStaff()) {
             userRepository.delete(user);
             log.info("User delete successfully: {}", idUser);
         } else {
@@ -87,7 +101,7 @@ public class UserService {
         user.setPassword(userDTO.getPassword());
         user.setDateCreate(userDTO.getDateCreate());
         user.setMail(userDTO.getMail());
-        user.setIsStaff(userDTO.getIsStaff());
+        user.setStaff(userDTO.isStaff());
         user.setFirstName(userDTO.getFirstName());
         user.setMiddleName(userDTO.getMiddleName());
         user.setLastName(userDTO.getLastName());
@@ -108,7 +122,7 @@ public class UserService {
                 .lastName(user.getLastName())
                 .mail(user.getMail())
                 .numberPhone(user.getNumberPhone())
-                .isStaff(user.getIsStaff())
+                .isStaff(user.isStaff())
                 .dateCreate(user.getDateCreate())
                 .status(user.getStatus())
                 .userLoyaltyLevelId(user.getUserLoyaltyLevel().getId())

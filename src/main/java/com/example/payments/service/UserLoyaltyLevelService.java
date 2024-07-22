@@ -33,8 +33,10 @@ public class UserLoyaltyLevelService {
             UserLoyaltyLevel userLoyaltyLevel = new UserLoyaltyLevel();
             TransferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(userLoyaltyLevelDTO, userLoyaltyLevel);
             UserLoyaltyLevel resultUserLoyaltyLevel = userLoyaltyLevelRepository.save(userLoyaltyLevel);
+            log.info("Create user loyalty level successfully: {}", userLoyaltyLevelDTO);
             return TransferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(resultUserLoyaltyLevel);
         } else {
+            log.warn("Failed to create user loyalty level: {}", userLoyaltyLevelDTO);
             throw new UserLoyaltyLevelCreationException(userLoyaltyLevelDTO);
         }
     }
@@ -44,12 +46,13 @@ public class UserLoyaltyLevelService {
         List<UserLoyaltyLevel>  userLoyaltyLevels=userLoyaltyLevelRepository.findUserLoyaltyLevelByCode(userLoyaltyLevel.getCode());
         for (UserLoyaltyLevel u : userLoyaltyLevels) {
             if (!userLoyaltyLevel.getId().equals(u.getId())) {
-                log.warn("Failed to update user: {}", userLoyaltyLevelDTO);
+                log.warn("Failed to update user loyalty level: {}", userLoyaltyLevelDTO);
                 throw new UserLoyaltyLevelUpdateException(userLoyaltyLevelDTO);
             }
         }
         TransferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(userLoyaltyLevelDTO, userLoyaltyLevel);
         UserLoyaltyLevel resultUserLoyaltyLevel = userLoyaltyLevelRepository.save(userLoyaltyLevel);
+        log.info("Update user loyalty level successfully: {}", userLoyaltyLevelDTO);
         return TransferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(resultUserLoyaltyLevel);
 
     }
@@ -70,6 +73,7 @@ public class UserLoyaltyLevelService {
     }
 
     private UserLoyaltyLevelDTO TransferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(UserLoyaltyLevel userLoyaltyLevel) {
+
         UserLoyaltyLevelDTO userLoyaltyLevelDTO = new UserLoyaltyLevelDTO();
         userLoyaltyLevelDTO.setId(userLoyaltyLevel.getId());
         userLoyaltyLevelDTO.setCode(userLoyaltyLevel.getCode());

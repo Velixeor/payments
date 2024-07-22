@@ -36,13 +36,13 @@ public class User {
     @Column(name = "number_phone", nullable = false, unique = true)
     private String numberPhone;
     @Column(name = "is_staff", nullable = false)
-    private Boolean isStaff;
+    private boolean isStaff;
     @Column(name = "date_create", nullable = false)
     private ZonedDateTime dateCreate;
     @Column(name = "date_update")
     private ZonedDateTime dateUpdate;
-    @Enumerated(EnumType.STRING) //значение будет сохранено в базу как число
-    @Column(name="status")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private Status status;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_loyalty_level_id", nullable = false)

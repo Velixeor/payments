@@ -3,7 +3,6 @@ package com.example.payments.dto;
 
 import com.example.payments.entity.Status;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,18 +12,12 @@ import java.time.ZonedDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserDTO {
+public class BankAccountDTO {
     private Integer id;
-    private String login;
-    private String password;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String mail;
-    private String numberPhone;
-    private boolean isStaff;
+    private String code;
     private ZonedDateTime dateCreate;
     private Status status;
-    private Integer userLoyaltyLevelId;
+    private String currency;
+    private Integer balance;
+    private Integer userID;
 }
