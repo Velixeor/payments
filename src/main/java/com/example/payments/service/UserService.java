@@ -45,7 +45,7 @@ public class UserService {
             log.info("User created successfully: {}", userDTO);
             return resultUserDTO;
         } else {
-            log.warn("Failed to create user: {}", userDTO);
+            log.error("Failed to create user: {}", userDTO);
             throw new UserCreationException(userDTO);
         }
     }
@@ -55,14 +55,14 @@ public class UserService {
         User user = userRepository.getUserById(userDTO.getId());
         log.info("Start transactional");
         if (user.getStatus() != Status.ACTIVE) {
-            log.warn("Failed to update user: {}", userDTO);
+            log.error("Failed to update user: {}", userDTO);
             throw new UserUpdateException(userDTO);
         }
 
         List<User> userList = userRepository.findByLoginOrMailOrNumberPhone(userDTO.getLogin(), userDTO.getMail(), userDTO.getNumberPhone());
         for (User u : userList) {
             if (!user.getId().equals(u.getId())) {
-                log.warn("Failed to update user: {}", userDTO);
+                log.error("Failed to update user: {}", userDTO);
                 throw new UserUpdateException(userDTO);
             }
         }
@@ -84,7 +84,7 @@ public class UserService {
             userRepository.delete(user);
             log.info("User delete successfully: {}", idUser);
         } else {
-            log.warn("Failed to delete user: {}", idUser);
+            log.error("Failed to delete user: {}", idUser);
             throw new UserDeleteException("Attempt to delete staff");
         }
 

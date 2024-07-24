@@ -36,7 +36,7 @@ public class UserLoyaltyLevelService {
             log.info("Create user loyalty level successfully: {}", userLoyaltyLevelDTO);
             return TransferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(resultUserLoyaltyLevel);
         } else {
-            log.warn("Failed to create user loyalty level: {}", userLoyaltyLevelDTO);
+            log.error("Failed to create user loyalty level: {}", userLoyaltyLevelDTO);
             throw new UserLoyaltyLevelCreationException(userLoyaltyLevelDTO);
         }
     }
@@ -46,7 +46,7 @@ public class UserLoyaltyLevelService {
         List<UserLoyaltyLevel>  userLoyaltyLevels=userLoyaltyLevelRepository.findUserLoyaltyLevelByCode(userLoyaltyLevel.getCode());
         for (UserLoyaltyLevel u : userLoyaltyLevels) {
             if (!userLoyaltyLevel.getId().equals(u.getId())) {
-                log.warn("Failed to update user loyalty level: {}", userLoyaltyLevelDTO);
+                log.error("Failed to update user loyalty level: {}", userLoyaltyLevelDTO);
                 throw new UserLoyaltyLevelUpdateException(userLoyaltyLevelDTO);
             }
         }
