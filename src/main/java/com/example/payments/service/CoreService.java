@@ -2,8 +2,8 @@ package com.example.payments.service;
 
 
 import com.example.payments.dto.BankAccountDTO;
+import com.example.payments.dto.UserCoreDTO;
 import com.example.payments.dto.UserDTO;
-import com.example.payments.dto.UserDTOCore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -22,13 +22,15 @@ public class CoreService {
     @Value("${URLCORE:http://localhost:8081/api/v1}")
     private String urlCore;
 
+
     public CoreService(BankAccountService bankAccountService, RestTemplate restTemplate) {
         this.bankAccountService = bankAccountService;
         this.restTemplate = restTemplate;
+
     }
 
     @Transactional
-    public BankAccountDTO createBankAccountFromCore(BankAccountDTO bankAccountDTO) {
+    public BankAccountDTO createCoreBankAccount(BankAccountDTO bankAccountDTO) {
         String url = urlCore + "/bank-account/create";
         log.info("Request to core /bank-account/create: {}", bankAccountDTO);
         ResponseEntity<BankAccountDTO> response = restTemplate.postForEntity(url, bankAccountDTO, BankAccountDTO.class);
@@ -36,32 +38,33 @@ public class CoreService {
     }
 
     @Transactional
-    public UserDTOCore createUserFromCore(UserDTOCore userDTOCore) {
+    public UserCoreDTO createCoreUser(UserCoreDTO userCoreDTO) {
         String url = urlCore + "/user/create";
-        log.info("Request to core /user/create: {}", userDTOCore);
-        ResponseEntity<UserDTOCore> response = restTemplate.postForEntity(url, userDTOCore, UserDTOCore.class);
+        log.info("Request to core /user/create: {}", userCoreDTO);
+        ResponseEntity<UserCoreDTO> response = restTemplate.postForEntity(url, userCoreDTO, UserCoreDTO.class);
         return response.getBody();
     }
 
     @Transactional
-    public UserDTOCore updateUserFromCore(UserDTOCore userDTOCore) {
+    public UserCoreDTO updateCoreUser(UserCoreDTO userCoreDTO) {
         String url = urlCore + "/user/update";
-        log.info("Request to core /user/update: {}", userDTOCore);
-        HttpEntity<UserDTOCore> requestEntity = new HttpEntity<>(userDTOCore);
-        ResponseEntity<UserDTOCore> response = restTemplate.exchange(url,
+        log.info("Request to core /user/update: {}", userCoreDTO);
+        HttpEntity<UserCoreDTO> requestEntity = new HttpEntity<>(userCoreDTO);
+        ResponseEntity<UserCoreDTO> response = restTemplate.exchange(url,
                 HttpMethod.PUT,
                 requestEntity,
-                UserDTOCore.class);
+                UserCoreDTO.class);
         return response.getBody();
     }
 
     @Transactional
-    public void databaseSynchronization(UserDTO userDTO) {
+    public void coreSynchronization(UserDTO userDTO) {
         log.info("Start transactional");
         BankAccountDTO bankAccountDTO = bankAccountService.createDefaultBankAccount(userDTO.getId());
-        UserDTOCore userDTOCore = new UserDTOCore(userDTO.getId(), userDTO.getLogin(), userDTO.getStatus());
-        createUserFromCore(userDTOCore);
-        createBankAccountFromCore(bankAccountDTO);
+        UserCoreDTO userCoreDTO = new UserCoreDTO(userDTO.getId(), userDTO.getLogin(), userDTO.getStatus());
+        createCoreUser(userCoreDTO);
+        createCoreBankAccount(bankAccountDTO);
+
 
     }
 }

@@ -18,6 +18,5 @@ public class BankAccountDTO {
     private ZonedDateTime dateCreate;
     private Status status;
     private String currency;
-    private Integer balance;
     private Integer userID;
 }

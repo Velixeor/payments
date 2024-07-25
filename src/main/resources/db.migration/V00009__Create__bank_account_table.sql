@@ -4,7 +4,6 @@ create table auth.bank_account
     code        text                        not null unique,
     currency    text                        not null,
     status      text                        not null,
-    balance     integer                     not null,
     date_create timestamp(6) with time zone not null,
     user_id     integer                     not null,
     foreign key (user_id) references auth.user (id)

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTOCore {
+public class UserCoreDTO {
     private Integer id;
     private String login;
     private Status status;

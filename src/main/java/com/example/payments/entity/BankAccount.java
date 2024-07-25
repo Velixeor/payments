@@ -25,12 +25,11 @@ public class BankAccount {
     private String code;
     @Column(name = "date_create", nullable = false)
     private ZonedDateTime dateCreate;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status;
     @Column(name = "currency", nullable = false)
     private String currency;
-    @Column(name = "balance", nullable = false)
-    private Integer balance;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

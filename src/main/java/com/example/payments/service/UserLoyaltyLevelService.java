@@ -31,10 +31,10 @@ public class UserLoyaltyLevelService {
     public UserLoyaltyLevelDTO createUserLoyaltyLevel(UserLoyaltyLevelDTO userLoyaltyLevelDTO) {
         if (!userLoyaltyLevelRepository.existsUserLoyaltyLevelByCode(userLoyaltyLevelDTO.getCode())) {
             UserLoyaltyLevel userLoyaltyLevel = new UserLoyaltyLevel();
-            TransferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(userLoyaltyLevelDTO, userLoyaltyLevel);
+            transferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(userLoyaltyLevelDTO, userLoyaltyLevel);
             UserLoyaltyLevel resultUserLoyaltyLevel = userLoyaltyLevelRepository.save(userLoyaltyLevel);
             log.info("Create user loyalty level successfully: {}", userLoyaltyLevelDTO);
-            return TransferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(resultUserLoyaltyLevel);
+            return transferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(resultUserLoyaltyLevel);
         } else {
             log.error("Failed to create user loyalty level: {}", userLoyaltyLevelDTO);
             throw new UserLoyaltyLevelCreationException(userLoyaltyLevelDTO);
@@ -50,15 +50,15 @@ public class UserLoyaltyLevelService {
                 throw new UserLoyaltyLevelUpdateException(userLoyaltyLevelDTO);
             }
         }
-        TransferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(userLoyaltyLevelDTO, userLoyaltyLevel);
+        transferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(userLoyaltyLevelDTO, userLoyaltyLevel);
         UserLoyaltyLevel resultUserLoyaltyLevel = userLoyaltyLevelRepository.save(userLoyaltyLevel);
         log.info("Update user loyalty level successfully: {}", userLoyaltyLevelDTO);
-        return TransferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(resultUserLoyaltyLevel);
+        return transferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(resultUserLoyaltyLevel);
 
     }
 
 
-    private void TransferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(UserLoyaltyLevelDTO userLoyaltyLevelDTO,
+    private void transferringDataInUserLoyaltyLevelFromUserLoyaltyLevelDTO(final UserLoyaltyLevelDTO userLoyaltyLevelDTO,
                                                                            UserLoyaltyLevel userLoyaltyLevel) {
         userLoyaltyLevel.setCode(userLoyaltyLevelDTO.getCode());
         userLoyaltyLevel.setIsActive(userLoyaltyLevelDTO.getIsActive());
@@ -72,7 +72,7 @@ public class UserLoyaltyLevelService {
 
     }
 
-    private UserLoyaltyLevelDTO TransferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(UserLoyaltyLevel userLoyaltyLevel) {
+    private UserLoyaltyLevelDTO transferringDataInUserLoyaltyLevelDTOFromUserLoyaltyLevel(final UserLoyaltyLevel userLoyaltyLevel) {
 
         UserLoyaltyLevelDTO userLoyaltyLevelDTO = new UserLoyaltyLevelDTO();
         userLoyaltyLevelDTO.setId(userLoyaltyLevel.getId());

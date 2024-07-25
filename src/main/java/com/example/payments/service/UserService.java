@@ -1,8 +1,8 @@
 package com.example.payments.service;
 
 
+import com.example.payments.dto.UserCoreDTO;
 import com.example.payments.dto.UserDTO;
-import com.example.payments.dto.UserDTOCore;
 import com.example.payments.entity.Status;
 import com.example.payments.entity.User;
 import com.example.payments.exception.user.UserCreationException;
@@ -38,10 +38,10 @@ public class UserService {
         User user = new User();
         log.info("Start transactional");
         if (!userRepository.existsUserByLoginAndAndMailAndNumberPhone(userDTO.getLogin(), userDTO.getNumberPhone(), userDTO.getMail())) {
-            TransferringDataInUserFromUserDTO(userDTO, user);
+            transferringDataInUserFromUserDTO(userDTO, user);
             User resultUser = userRepository.save(user);
-            UserDTO resultUserDTO = TransferringDataInUserDTOFromUser(resultUser);
-            coreService.databaseSynchronization(resultUserDTO);
+            UserDTO resultUserDTO = transferringDataInUserDTOFromUser(resultUser);
+            coreService.coreSynchronization(resultUserDTO);
             log.info("User created successfully: {}", userDTO);
             return resultUserDTO;
         } else {
@@ -67,12 +67,12 @@ public class UserService {
             }
         }
 
-        TransferringDataInUserFromUserDTO(userDTO, user);
+        transferringDataInUserFromUserDTO(userDTO, user);
         user.setDateUpdate(ZonedDateTime.now());
         User resultUser = userRepository.save(user);
-        UserDTO resultUserDTO = TransferringDataInUserDTOFromUser(resultUser);
-        UserDTOCore userDTOCore = new UserDTOCore(resultUserDTO.getId(), resultUserDTO.getLogin(), resultUserDTO.getStatus());
-        coreService.updateUserFromCore(userDTOCore);
+        UserDTO resultUserDTO = transferringDataInUserDTOFromUser(resultUser);
+        UserCoreDTO userCoreDTO = new UserCoreDTO(resultUserDTO.getId(), resultUserDTO.getLogin(), resultUserDTO.getStatus());
+        coreService.updateCoreUser(userCoreDTO);
         log.info("User update successfully: {}", userDTO);
         return resultUserDTO;
     }
@@ -92,12 +92,12 @@ public class UserService {
 
     public UserDTO getUser(Integer idUser) {
         User user = userRepository.getUserById(idUser);
-        UserDTO userDTO = TransferringDataInUserDTOFromUser(user);
+        UserDTO userDTO = transferringDataInUserDTOFromUser(user);
         return userDTO;
 
     }
 
-    private void TransferringDataInUserFromUserDTO(UserDTO userDTO, User user) {
+    private void transferringDataInUserFromUserDTO(final UserDTO userDTO, User user) {
         user.setPassword(userDTO.getPassword());
         user.setDateCreate(userDTO.getDateCreate());
         user.setMail(userDTO.getMail());
@@ -112,7 +112,7 @@ public class UserService {
 
     }
 
-    private UserDTO TransferringDataInUserDTOFromUser(User user) {
+    private UserDTO transferringDataInUserDTOFromUser(final User user) {
         UserDTO userDTO = UserDTO.builder()
                 .id(user.getId())
                 .login(user.getLogin())

@@ -32,21 +32,21 @@ public class BankAccountService {
     @Transactional
     public BankAccountDTO createBankAccount(BankAccountDTO bankAccountDTO) {
         BankAccount bankAccount = new BankAccount();
-        TransferringDataInBankAccountFromBankAccountDTO(bankAccountDTO, bankAccount);
+        transferringDataInBankAccountFromBankAccountDTO(bankAccountDTO, bankAccount);
         BankAccount bankAccountResult = bankAccountRepository.save(bankAccount);
-        return TransferringDataInBankAccountDTOFromBankAccount(bankAccountResult);
+        return transferringDataInBankAccountDTOFromBankAccount(bankAccountResult);
     }
 
     public BankAccountDTO updateBankAccountById(BankAccountDTO bankAccountDTO) {
         BankAccount bankAccount = bankAccountRepository.getBankAccountById(bankAccountDTO.getId());
-        TransferringDataInBankAccountFromBankAccountDTO(bankAccountDTO, bankAccount);
+        transferringDataInBankAccountFromBankAccountDTO(bankAccountDTO, bankAccount);
         BankAccount bankAccountResult = bankAccountRepository.save(bankAccount);
-        return TransferringDataInBankAccountDTOFromBankAccount(bankAccountResult);
+        return transferringDataInBankAccountDTOFromBankAccount(bankAccountResult);
     }
 
-    private void TransferringDataInBankAccountFromBankAccountDTO(BankAccountDTO bankAccountDTO,
+    private void transferringDataInBankAccountFromBankAccountDTO(final BankAccountDTO bankAccountDTO,
                                                                  BankAccount bankAccount) {
-        bankAccount.setBalance(bankAccountDTO.getBalance());
+
         bankAccount.setCode(bankAccountDTO.getCode());
         bankAccount.setId(bankAccountDTO.getId());
         bankAccount.setDateCreate(bankAccountDTO.getDateCreate());
@@ -58,19 +58,17 @@ public class BankAccountService {
 
     public BankAccountDTO createDefaultBankAccount(Integer userID) {
         BankAccount bankAccount = new BankAccount();
-        bankAccount.setBalance(3000);
         bankAccount.setUser(userRepository.getUserById(userID));
         bankAccount.setDateCreate(ZonedDateTime.now());
         bankAccount.setCurrency(currency);
         bankAccount.setStatus(Status.ACTIVE);
         bankAccount.setCode("default " + userID);
         BankAccount bankAccountResult = bankAccountRepository.save(bankAccount);
-        return TransferringDataInBankAccountDTOFromBankAccount(bankAccountResult);
+        return transferringDataInBankAccountDTOFromBankAccount(bankAccountResult);
     }
 
-    private BankAccountDTO TransferringDataInBankAccountDTOFromBankAccount(BankAccount bankAccount) {
+    private BankAccountDTO transferringDataInBankAccountDTOFromBankAccount(final BankAccount bankAccount) {
         BankAccountDTO bankAccountDTO = new BankAccountDTO();
-        bankAccountDTO.setBalance(bankAccount.getBalance());
         bankAccountDTO.setCode(bankAccount.getCode());
         bankAccountDTO.setId(bankAccount.getId());
         bankAccountDTO.setDateCreate(bankAccount.getDateCreate());
