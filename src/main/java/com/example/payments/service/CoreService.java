@@ -2,15 +2,18 @@ package com.example.payments.service;
 
 
 import com.example.payments.dto.BankAccountDTO;
+import com.example.payments.dto.CoreSynchronizationDTO;
 import com.example.payments.dto.UserCoreDTO;
 import com.example.payments.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -57,13 +60,38 @@ public class CoreService {
         return response.getBody();
     }
 
+
     @Transactional
     public void coreSynchronization(UserDTO userDTO) {
-        log.info("Start transactional");
-        BankAccountDTO bankAccountDTO = bankAccountService.createDefaultBankAccount(userDTO.getId());
-        UserCoreDTO userCoreDTO = new UserCoreDTO(userDTO.getId(), userDTO.getLogin(), userDTO.getStatus());
-        createCoreUser(userCoreDTO);
-        createCoreBankAccount(bankAccountDTO);
+        try {
+            BankAccountDTO bankAccountDTO = bankAccountService.createDefaultBankAccount(userDTO.getId());
+            CoreSynchronizationDTO coreSynchronizationDTO = CoreSynchronizationDTO.builder()
+                    .bankAccountID(bankAccountDTO.getId())
+                    .login(userDTO.getLogin())
+                    .bankAccountStatus(bankAccountDTO.getStatus())
+                    .bankAccountUserId(userDTO.getId())
+                    .code(bankAccountDTO.getCode())
+                    .currency(bankAccountDTO.getCurrency())
+                    .userStatus(userDTO.getStatus())
+                    .dateCreate(bankAccountDTO.getDateCreate())
+                    .userId(userDTO.getId())
+                    .build();
+
+            String url = urlCore + "/synchronization/";
+            log.info("Request to core /synchronization: {}", coreSynchronizationDTO);
+
+            ResponseEntity<CoreSynchronizationDTO> response = restTemplate.postForEntity(url, coreSynchronizationDTO, CoreSynchronizationDTO.class);
+
+            if (response.getStatusCode() != HttpStatus.OK) {
+                throw new RuntimeException("Failed to synchronize with core: " + response.getStatusCode());
+            }
+
+        } catch (RestClientException e) {
+            log.error("Error during synchronization with core: ", e);
+            throw new RuntimeException("Failed to synchronize with core", e);
+        }
+
+        log.info("End transactional");
 
 
     }
