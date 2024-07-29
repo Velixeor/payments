@@ -16,6 +16,14 @@ spring:
     password: 135790
     schemas: auth,public
     locations: db.migration
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
+core:
+  service:
+    type: rabbitmq
 currency: ${CURRENCY:RUB}
 urlcore: ${URLCORE:http://localhost:8081/api/v1}
