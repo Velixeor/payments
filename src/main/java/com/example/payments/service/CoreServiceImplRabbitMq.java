@@ -5,10 +5,7 @@ import com.example.payments.dto.BankAccountDTO;
 import com.example.payments.dto.CoreSynchronizationDTO;
 import com.example.payments.dto.UserCoreDTO;
 import com.example.payments.dto.UserDTO;
-import com.example.payments.exception.core.SynchronizationException;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -83,28 +80,12 @@ public class CoreServiceImplRabbitMq implements CoreService {
                 .userId(userDTO.getId())
                 .build();
         MessageProperties messageProperties = new MessageProperties();
-        messageProperties.setHeader("messageType", "Synchronization");
+        messageProperties.setHeader("messageType", "synchronization");
         Message message = messageConverter.toMessage(coreSynchronizationDTO, messageProperties);
-        Object response = rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
-        if (response instanceof Message) {
-            String responseBody = new String(((Message) response).getBody());
-             if(checkStatusCode(responseBody)){
-                 throw new SynchronizationException();
-             }
-        } else {
-            throw new IllegalArgumentException("Expected response of type Message but got: " + response.getClass().getName());
-        }
+       rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
+
 
     }
-    private boolean checkStatusCode(String responseBody) {
-        try {
-            JSONObject jsonResponse = new JSONObject(responseBody);
-            int statusCode = jsonResponse.getInt("status");
-            return statusCode == 200;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+
 
 }
