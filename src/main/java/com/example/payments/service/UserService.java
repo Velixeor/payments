@@ -23,11 +23,11 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final UserLoyaltyLevelRepository userLoyaltyLevelRepository;
-    private final CoreService coreService;
+    private final CoreServiceSynchronization coreService;
 
     public UserService(UserRepository userRepository,
                        UserLoyaltyLevelRepository userLoyaltyLevelRepository,
-                       CoreService coreService) {
+                       CoreServiceSynchronization coreService) {
         this.userRepository = userRepository;
         this.userLoyaltyLevelRepository = userLoyaltyLevelRepository;
         this.coreService = coreService;

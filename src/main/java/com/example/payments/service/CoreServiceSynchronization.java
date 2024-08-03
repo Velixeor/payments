@@ -6,7 +6,7 @@ import com.example.payments.dto.UserCoreDTO;
 import com.example.payments.dto.UserDTO;
 
 
-public interface CoreService {
+public interface CoreServiceSynchronization {
     BankAccountDTO createCoreBankAccount(BankAccountDTO bankAccountDTO);
     UserCoreDTO createCoreUser(UserCoreDTO userCoreDTO);
     UserCoreDTO updateCoreUser(UserCoreDTO userCoreDTO);

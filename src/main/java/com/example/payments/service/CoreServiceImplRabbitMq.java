@@ -5,26 +5,24 @@ import com.example.payments.dto.BankAccountDTO;
 import com.example.payments.dto.CoreSynchronizationDTO;
 import com.example.payments.dto.UserCoreDTO;
 import com.example.payments.dto.UserDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Slf4j
 @Service
-public class CoreServiceImplRabbitMq implements CoreService {
+@RequiredArgsConstructor
+public class CoreServiceImplRabbitMq implements CoreServiceSynchronization {
     private final RabbitTemplate rabbitTemplate;
     private final BankAccountService bankAccountService;
-    @Autowired
     private Jackson2JsonMessageConverter messageConverter;
 
-    public CoreServiceImplRabbitMq(RabbitTemplate rabbitTemplate, BankAccountService bankAccountService) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.bankAccountService = bankAccountService;
-    }
 
     @Override
     public BankAccountDTO createCoreBankAccount(BankAccountDTO bankAccountDTO) {
@@ -32,10 +30,6 @@ public class CoreServiceImplRabbitMq implements CoreService {
         messageProperties.setHeader("messageType", "createBankAccount");
         Message message = rabbitTemplate.getMessageConverter().toMessage(bankAccountDTO, messageProperties);
         BankAccountDTO response = (BankAccountDTO) rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
-        if (response == null) {
-            throw new RuntimeException("Failed to create Bank Account ");
-        }
-
         return response;
     }
 
@@ -45,10 +39,6 @@ public class CoreServiceImplRabbitMq implements CoreService {
         messageProperties.setHeader("messageType", "createUser");
         Message message = rabbitTemplate.getMessageConverter().toMessage(userCoreDTO, messageProperties);
         UserCoreDTO response = (UserCoreDTO) rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
-        if (response == null) {
-            throw new RuntimeException("Failed to create user");
-        }
-
         return response;
     }
 
@@ -58,13 +48,9 @@ public class CoreServiceImplRabbitMq implements CoreService {
         messageProperties.setHeader("messageType", "updateUser");
         Message message = rabbitTemplate.getMessageConverter().toMessage(userCoreDTO, messageProperties);
         UserCoreDTO response = (UserCoreDTO) rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
-        if (response == null) {
-            throw new RuntimeException("Failed to create user");
-        }
-
         return response;
     }
-
+    @Transactional
     @Override
     public void coreSynchronization(UserDTO userDTO) {
         BankAccountDTO bankAccountDTO = bankAccountService.createDefaultBankAccount(userDTO.getId());
@@ -82,7 +68,7 @@ public class CoreServiceImplRabbitMq implements CoreService {
         MessageProperties messageProperties = new MessageProperties();
         messageProperties.setHeader("messageType", "synchronization");
         Message message = messageConverter.toMessage(coreSynchronizationDTO, messageProperties);
-       rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
+        rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
 
 
     }

@@ -19,20 +19,21 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
-public class CoreServiceImplSynchronous implements CoreService{
+public class CoreServiceImplRest implements CoreServiceSynchronization {
     private final BankAccountService bankAccountService;
     private final RestTemplate restTemplate;
     @Value("${URLCORE:http://localhost:8081/api/v1}")
     private String urlCore;
 
 
-    public CoreServiceImplSynchronous(BankAccountService bankAccountService, RestTemplate restTemplate) {
+    public CoreServiceImplRest(BankAccountService bankAccountService, RestTemplate restTemplate) {
         this.bankAccountService = bankAccountService;
         this.restTemplate = restTemplate;
 
     }
 
     @Transactional
+    @Override
     public BankAccountDTO createCoreBankAccount(BankAccountDTO bankAccountDTO) {
         String url = urlCore + "/bank-account/create";
         log.info("Request to core /bank-account/create: {}", bankAccountDTO);
@@ -41,6 +42,7 @@ public class CoreServiceImplSynchronous implements CoreService{
     }
 
     @Transactional
+    @Override
     public UserCoreDTO createCoreUser(UserCoreDTO userCoreDTO) {
         String url = urlCore + "/user/create";
         log.info("Request to core /user/create: {}", userCoreDTO);
@@ -49,6 +51,7 @@ public class CoreServiceImplSynchronous implements CoreService{
     }
 
     @Transactional
+    @Override
     public UserCoreDTO updateCoreUser(UserCoreDTO userCoreDTO) {
         String url = urlCore + "/user/update";
         log.info("Request to core /user/update: {}", userCoreDTO);
@@ -62,6 +65,7 @@ public class CoreServiceImplSynchronous implements CoreService{
 
 
     @Transactional
+    @Override
     public void coreSynchronization(UserDTO userDTO) {
         try {
             BankAccountDTO bankAccountDTO = bankAccountService.createDefaultBankAccount(userDTO.getId());
