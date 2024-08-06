@@ -6,6 +6,7 @@ import com.example.payments.entity.BankAccount;
 import com.example.payments.entity.Status;
 import com.example.payments.repository.BankAccountRepository;
 import com.example.payments.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,18 +17,13 @@ import java.time.ZonedDateTime;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BankAccountService {
     private final BankAccountRepository bankAccountRepository;
     private final UserRepository userRepository;
     @Value("${currency:RUB}")
     private String currency;
 
-    public BankAccountService(BankAccountRepository bankAccountRepository, UserRepository userRepository
-    ) {
-        this.bankAccountRepository = bankAccountRepository;
-        this.userRepository = userRepository;
-
-    }
 
     @Transactional
     public BankAccountDTO createBankAccount(BankAccountDTO bankAccountDTO) {

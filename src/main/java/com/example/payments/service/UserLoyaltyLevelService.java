@@ -8,6 +8,7 @@ import com.example.payments.exception.userLoyaltyLevel.UserLoyaltyLevelCreationE
 import com.example.payments.exception.userLoyaltyLevel.UserLoyaltyLevelUpdateException;
 import com.example.payments.repository.PrivilegeRepository;
 import com.example.payments.repository.UserLoyaltyLevelRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +18,10 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserLoyaltyLevelService {
     private final UserLoyaltyLevelRepository userLoyaltyLevelRepository;
     private final PrivilegeRepository privilegeRepository;
-
-    public UserLoyaltyLevelService(UserLoyaltyLevelRepository userLoyaltyLevelRepository,
-                                   PrivilegeRepository privilegeRepository) {
-        this.userLoyaltyLevelRepository = userLoyaltyLevelRepository;
-        this.privilegeRepository = privilegeRepository;
-    }
 
 
     public UserLoyaltyLevelDTO createUserLoyaltyLevel(UserLoyaltyLevelDTO userLoyaltyLevelDTO) {

@@ -50,6 +50,7 @@ public class CoreServiceImplRabbitMq implements CoreServiceSynchronization {
         UserCoreDTO response = (UserCoreDTO) rabbitTemplate.convertSendAndReceive("PaymentExchange", "PaymentRoutingKey", message);
         return response;
     }
+
     @Transactional
     @Override
     public void coreSynchronization(UserDTO userDTO) {
