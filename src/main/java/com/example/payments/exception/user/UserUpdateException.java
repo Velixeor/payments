@@ -7,6 +7,6 @@ import com.example.payments.exception.PaymentsException;
 
 public class UserUpdateException extends PaymentsException {
     public UserUpdateException(UserDTO userDTO) {
-        super("Failed to create user " + userDTO);
+        super("Failed to update user " + userDTO);
     }
 }

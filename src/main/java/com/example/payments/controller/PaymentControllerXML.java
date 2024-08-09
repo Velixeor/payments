@@ -1,7 +1,8 @@
 package com.example.payments.controller;
 
 
-import com.example.payments.service.PaymentXmlService;
+import com.example.payments.dto.MoneyTransferDTO;
+import com.example.payments.service.PaymentServiceXML;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 @RequestMapping("/api/v1/payment-xml")
 @RequiredArgsConstructor
-public class XmlPaymentController {
-    private final PaymentXmlService paymentXmlService;
+public class PaymentControllerXML {
+    private final PaymentServiceXML paymentServiceXML;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> processXml(@RequestBody String xml) {
-
-        return new ResponseEntity<>(paymentXmlService.transferOfPayment(xml), HttpStatus.OK);
-
+    public ResponseEntity<Void> processXML(@RequestBody MoneyTransferDTO moneyTransferDTO) {
+        paymentServiceXML.transferOfPayment(moneyTransferDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
