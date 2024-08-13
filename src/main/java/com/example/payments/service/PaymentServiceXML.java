@@ -84,6 +84,7 @@ public class PaymentServiceXML {
 
     public SettlementInstruction15 CreateSettlementInstruction15(MoneyTransferDTO moneyTransferDTO) {
         SettlementInstruction15 settlementInstruction15 = new SettlementInstruction15();
+        settlementInstruction15.setSttlmMtd(SettlementMethod1Code.COVE);
         CashAccount40 cashAccount40To = new CashAccount40();
         CashAccount40 cashAccount40From = new CashAccount40();
         AccountIdentification4Choice accountIdentification4ChoiceTo = new AccountIdentification4Choice();
