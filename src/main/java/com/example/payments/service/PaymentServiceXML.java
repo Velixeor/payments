@@ -29,7 +29,7 @@ public class PaymentServiceXML {
     public void transferOfPayment(MoneyTransferDTO moneyTransferDTO) {
         try {
             Document document = new Document();
-            document.setFIToFICstmrCdtTrf(CreateFIToFICustomerCreditTransferV12(moneyTransferDTO));
+            document.setFIToFICstmrCdtTrf(createFIToFICustomerCreditTransferV12(moneyTransferDTO));
             String xml = convertDocumentToXML(document);
             rabbitTemplate.convertSendAndReceive("XmlPayment","XmlRoutingKey", xml);
 
@@ -57,32 +57,33 @@ public class PaymentServiceXML {
         return writer.toString();
     }
 
-    public FIToFICustomerCreditTransferV12 CreateFIToFICustomerCreditTransferV12(MoneyTransferDTO moneyTransferDTO) throws DatatypeConfigurationException {
+    public FIToFICustomerCreditTransferV12 createFIToFICustomerCreditTransferV12(MoneyTransferDTO moneyTransferDTO) throws DatatypeConfigurationException {
         FIToFICustomerCreditTransferV12 fiToFICustomerCreditTransferV12 = new FIToFICustomerCreditTransferV12();
-        fiToFICustomerCreditTransferV12.setGrpHdr(CreateGroupHeader113(moneyTransferDTO));
+        fiToFICustomerCreditTransferV12.setGrpHdr(createGroupHeader113(moneyTransferDTO));
+      /////Заполнить
         return fiToFICustomerCreditTransferV12;
     }
 
-    public GroupHeader113 CreateGroupHeader113(MoneyTransferDTO moneyTransferDTO) throws DatatypeConfigurationException {
+    public GroupHeader113 createGroupHeader113(MoneyTransferDTO moneyTransferDTO) throws DatatypeConfigurationException {
         GroupHeader113 groupHeader113 = new GroupHeader113();
         groupHeader113.setMsgId("1");
         XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-08-08T10:30:00Z");
         groupHeader113.setCreDtTm(xmlCalendar);
         groupHeader113.setNbOfTxs("1");
         groupHeader113.setBtchBookg(true);
-        groupHeader113.setSttlmInf(CreateSettlementInstruction15(moneyTransferDTO));
-        groupHeader113.setTtlIntrBkSttlmAmt(CreteActiveCurrencyAndAmount(moneyTransferDTO));
+        groupHeader113.setSttlmInf(createSettlementInstruction15(moneyTransferDTO));
+        groupHeader113.setTtlIntrBkSttlmAmt(creteActiveCurrencyAndAmount(moneyTransferDTO));
         return groupHeader113;
     }
 
-    public ActiveCurrencyAndAmount CreteActiveCurrencyAndAmount(MoneyTransferDTO moneyTransferDTO) {
+    public ActiveCurrencyAndAmount creteActiveCurrencyAndAmount(MoneyTransferDTO moneyTransferDTO) {
         ActiveCurrencyAndAmount activeCurrencyAndAmount = new ActiveCurrencyAndAmount();
         activeCurrencyAndAmount.setCcy(moneyTransferDTO.getCurrency());
         activeCurrencyAndAmount.setValue(BigDecimal.valueOf(moneyTransferDTO.getAmount()));
         return activeCurrencyAndAmount;
     }
 
-    public SettlementInstruction15 CreateSettlementInstruction15(MoneyTransferDTO moneyTransferDTO) {
+    public SettlementInstruction15 createSettlementInstruction15(MoneyTransferDTO moneyTransferDTO) {
         SettlementInstruction15 settlementInstruction15 = new SettlementInstruction15();
         settlementInstruction15.setSttlmMtd(SettlementMethod1Code.COVE);
         CashAccount40 cashAccount40To = new CashAccount40();
