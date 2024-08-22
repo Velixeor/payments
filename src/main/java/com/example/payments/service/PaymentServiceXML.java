@@ -17,6 +17,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 
@@ -39,6 +40,10 @@ public class PaymentServiceXML {
         } catch (DatatypeConfigurationException e) {
             log.error("Error converting Data in XML", e);
             throw new RuntimeException("Failed to convert Data in XML", e);
+        }catch(Exception e){
+            log.error("Error", e);
+            throw new RuntimeException("Failed to convert Data in XML", e);
+
         }
 
     }
@@ -57,10 +62,14 @@ public class PaymentServiceXML {
         return writer.toString();
     }
 
-    public FIToFICustomerCreditTransferV12 createFIToFICustomerCreditTransferV12(MoneyTransferDTO moneyTransferDTO) throws DatatypeConfigurationException {
+    public FIToFICustomerCreditTransferV12 createFIToFICustomerCreditTransferV12(MoneyTransferDTO moneyTransferDTO) throws DatatypeConfigurationException, NoSuchFieldException, IllegalAccessException {
         FIToFICustomerCreditTransferV12 fiToFICustomerCreditTransferV12 = new FIToFICustomerCreditTransferV12();
         fiToFICustomerCreditTransferV12.setGrpHdr(createGroupHeader113(moneyTransferDTO));
-      /////Заполнить
+        FIToFICustomerCreditTransferV12 fiToFICustomerCreditTransferV122=new FIToFICustomerCreditTransferV12();
+        Field field = FIToFICustomerCreditTransferV12.class.getDeclaredField("cdtTrfTxInf");
+        field.setAccessible(true);
+        field.set(fiToFICustomerCreditTransferV12,  fiToFICustomerCreditTransferV122.getCdtTrfTxInf());
+
         return fiToFICustomerCreditTransferV12;
     }
 
