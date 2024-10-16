@@ -6,8 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.Collections;
 
 
 @Entity
@@ -16,7 +21,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user", schema = "auth")
-public class User {
+public class User implements UserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,5 +53,15 @@ public class User {
     @JoinColumn(name = "user_loyalty_level_id", nullable = false)
     private UserLoyaltyLevel userLoyaltyLevel;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        String role = isStaff ? "ROLE_STAFF" : "ROLE_USER";
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
 
 }

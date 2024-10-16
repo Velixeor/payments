@@ -27,3 +27,44 @@ core:
     type: rabbitmq
 currency: ${CURRENCY:RUB}
 urlcore: ${URLCORE:http://localhost:8081/api/v1}
+security:
+  jwt:
+    public-key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlq0+htPhjCxEcbLzKjDq
+      VWCSDuFIPl5PYWFM0gmLg74jxCLXsItsZvvgpQKc+APorna3WtMO9RoN5+7W9K3+
+      qJpxlzP0vOzx7xoNTx+OSmfUwJjuA1zdfA/Y5+OXLtvyNzz2V8WOmxLhek6LtwjR
+      eOCuCuHBSs8ex0LDFuUmkIlyfc1hebeei3EUIKODs8sZoeTFVJxiX6+pyjanBlL1
+      Rb6gXQUQ3iPzP1ymhW7aCbYzrJsOnnwEx5T9shSgq8FYsetk46UCu8Iv6RtZld2R
+      hq082Yik5+2wowXT6vpNQJ3Yj8MQPiT7s+XYd4gmBFPwiVapLEnuzYReTkQuF8RZ
+      0QIDAQAB
+      -----END PUBLIC KEY-----
+    private-key: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCWrT6G0+GMLERx
+      svMqMOpVYJIO4Ug+Xk9hYUzSCYuDviPEItewi2xm++ClApz4A+iudrda0w71Gg3n
+      7tb0rf6omnGXM/S87PHvGg1PH45KZ9TAmO4DXN18D9jn45cu2/I3PPZXxY6bEuF6
+      Tou3CNF44K4K4cFKzx7HQsMW5SaQiXJ9zWF5t56LcRQgo4Ozyxmh5MVUnGJfr6nK
+      NqcGUvVFvqBdBRDeI/M/XKaFbtoJtjOsmw6efATHlP2yFKCrwVix62TjpQK7wi/p
+      G1mV3ZGGrTzZiKTn7bCjBdPq+k1AndiPwxA+JPuz5dh3iCYEU/CJVqksSe7NhF5O
+      RC4XxFnRAgMBAAECggEAAVd7FvkZiSWWxBrCFWYt8ViEtxsJ8+Y5QjvQfY6mCPm0
+      jf6lGYvFnsLPl2CR1G030UqPgOtKtuOGbAI23029AV7Ys+47l8LAt8PtX5Q/cImt
+      UxFkOIWcl5941hMd1EYTSYB34sReAU2r0iqTY2vxw5K1R2BcbTBcIjhFuPU4QJwO
+      jKm4Fs1w/TQCD+Z25+ibI7DmrjpPPRFIE8mUq88HOglcE0j74R1B4dVvrcR57RhX
+      K3KtGoBzjaZup7rqhcguQ/t4CXBtUkNxF2kysnqqsoqrabANqBn2VnAtGUJPTLcP
+      nVg69ewuCbf795y9qQPVSJ82qXSOG3mXp3TKpksLHQKBgQDOU3Yctsv7nPXpmPO5
+      JRXhfaPb5wZUoCjXWZgsVnjrZsl0kBRR1Hm+C2LoLsa23q4xefoGzU36vTVVA12t
+      0U8GIYVkKdBgm+WbJDAezGpbZftmcCH80LhQ9WkyQS6xqwo9oPchc3TA+J17MVhG
+      p7y7Q+W5STSKpfi7YyvF44kedQKBgQC68/ASH0iUWwQ0/ReVwOTLOKujS00aafDX
+      5J1BKPuw3aPugZKwcgtynQG+ZTYI9n5L6fNeOuABS7SEYm2UfTabKldx+ruf4lUh
+      8Gckjm+D07GHS2dPTUugWjjayrL6388xU/pVl7Rgpdnrw0M8uPhQvo03Y6DJlWGK
+      Z5dtr9CabQKBgGiOXO1iKO6h9PBixSeOxo7Vd4MJiOi7nNa8nWPikjZgiThbhyCM
+      twD6ji2w/pxPLiD+ehiWU6z70xn4sbFSv2QQ+qLumZ1Lg0hiR0xkNIWKoaKgsmiG
+      cND9/EguRfZdAbyHZJT8CC9+DXgPYnezqu2PE8wYb9rPDsQPFnCaxLK9AoGBAIHg
+      n+JnG0v9YxHQ1gaySAAqcYry8DCucqP5bYnsB9aaU52JJLgxsmRAUQrNU1msrJbe
+      g7Tt39rmlhT2MDxdNIddRfyn/JqZaR033t/VmAEUGxvrtWyxPR28MA1HjkmdHFqf
+      haTazHPsJFWWhGp18gReLMrTCsugXHADgX6xCpGNAoGBAMDRNQ0c9+RLlrkejQb+
+      RZD8I5QWBgxAnSnMilrVmKxtz7xCWakprh+gCag5IYUyVax8ONOE7w2Lt0wKQHP+
+      E8Bas2eGJqy4VwpkoYvEoMWpaFs3BiNx8Hd4Hj3Fm+x4wjdrlHp/apX5zeuteMCF
+      d8p51pnCY7A05HMcnwONt29H
+      -----END PRIVATE KEY-----

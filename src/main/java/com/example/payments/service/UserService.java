@@ -12,6 +12,8 @@ import com.example.payments.repository.UserLoyaltyLevelRepository;
 import com.example.payments.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +24,17 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserLoyaltyLevelRepository userLoyaltyLevelRepository;
     private final CoreServiceSynchronization coreService;
+
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByLogin(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
 
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
