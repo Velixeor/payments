@@ -57,7 +57,10 @@ public class SecurityConfiguration {
     private void configureHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry httpAuthorization) {
         /* API ROUTES */
         httpAuthorization.requestMatchers("/api/v1/user/**").permitAll();
-        httpAuthorization.requestMatchers("/auth/token").permitAll();
+        httpAuthorization.requestMatchers("/api/v1/auth/token").permitAll();
+        httpAuthorization.requestMatchers("/api/v1/auth/logout").authenticated();
+        httpAuthorization.requestMatchers("/api/v1/auth/login").anonymous();
+        httpAuthorization.requestMatchers("/api/v1/auth/current").permitAll();
         httpAuthorization.requestMatchers("/api/**").denyAll();
         /* STATIC ROUTES */
         httpAuthorization.requestMatchers("/**").permitAll();
